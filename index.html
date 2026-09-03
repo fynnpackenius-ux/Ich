@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FYNN — CUE SHEET</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -236,6 +237,52 @@
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important; animation:none !important;}
   }
+  #notesToggle{
+  position:fixed; top:50%; right:0; transform:translateY(-50%);
+  width:44px; height:130px;
+  background:var(--panel); color:var(--amber);
+  border:1px solid var(--track); border-right:none;
+  border-radius:8px 0 0 8px;
+  font-size:14px;
+  letter-spacing:0.1em;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  cursor:pointer; z-index:200;
+  transition:width .2s ease, background .2s ease;
+}
+#notesToggle:hover{ width:52px; background:#1a1a1d; }
+
+#notesOverlay{
+  position:fixed; inset:0; background:rgba(0,0,0,0.5);
+  z-index:299; opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+#notesOverlay.open{ opacity:1; pointer-events:auto; }
+
+#notesPanel{
+  position:fixed; top:0; right:0; height:100%;
+  width:min(360px, 88vw);
+  background:var(--panel); border-left:1px solid var(--track);
+  z-index:300;
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  display:flex; flex-direction:column;
+  padding:24px 20px;
+}
+#notesPanel.open{ transform:translateX(0); }
+
+.notes-header{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:16px;
+}
+.notes-title{ font-size:12px; letter-spacing:0.2em; color:var(--amber); }
+#notesClose{
+  background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer;
+}
+.notes-content{
+  overflow-y:auto;
+  color:var(--white); font-size:14.5px; line-height:1.7;
+}
+.notes-content p{ margin-bottom:14px; }
 </style>
 </head>
 <body>
@@ -333,6 +380,18 @@
       <a href="https://de.wikipedia.org/wiki/Antiteilchen"target="_blank" class="tag"> Das btw auch echt cooool obwohl ich es nicht verstehe  </a>
     </div>
   </footer>
+  <button id="notesToggle" class="mono" aria-label="Box öffnen">Zukunft </button>
+
+<div id="notesOverlay"></div>
+<div id="notesPanel">
+  <div class="notes-header">
+    <span class="mono notes-title">NOTIZ</span>
+    <button id="notesClose" class="mono" aria-label="Schließen">✕</button>
+  </div>
+  <div class="notes-content">
+    <p>Ich möchte in der Zukunft auf jeden Fall in die Veranstaltungstechnik gehen und wenn es gut läuft bin ich in 4 Jahren Fachkraft für Veranstaltungstechnik, in 10 Jahren Meister für Veranstaltungstechnik und in 12 Jahren Ausbilder für Veranstaltunsgtechnik, da ich damit meine Liebe zur Veranstaltungstechnik anderen weitergeben kann. <br> Geht man weg vom Job, möchte ich eine Familie und das so bald wie es möglich ist. Ich möchte mit meiner Familie aus Jona und meinen Kindern, die ich bekommen möchte, in einem Haus am Feld wohnen, damit ich mit meinen Kindern durchs Feld laufen kann oder Nachtwanderungen am Feld zu unternehmen. Außerdem freue ich mich darauf zu sehen, wie sich alle meine Freunde entwickeln, wie sie ihre Träume erfüllen und ich hoffe, dass ich mich in der Zukunft weiter mit Ihnen treffen werde und eine schöne Zeit haben werde. Noch eine Sache zuletzt, die ich besonders in der letzten Zeit lernen musste. Die Vergangenheit kann euch Dinge lehren, aber sie kann euch eure Zukunft nicht vorhersagen, also lebt immer im hier und jetzt und genießt das Leben, denn es ist zu kurz, um die ganze Zeit zurück zu schauen.<br> <br> Peace out
+  </div>
+</div>
 
 </main>
 
@@ -362,6 +421,17 @@
   goBtn.addEventListener('keydown', (e)=>{
     if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); runCue(); }
   });
+  const notesToggle = document.getElementById('notesToggle');
+const notesClose = document.getElementById('notesClose');
+const notesPanel = document.getElementById('notesPanel');
+const notesOverlay = document.getElementById('notesOverlay');
+
+function openNotes(){ notesPanel.classList.add('open'); notesOverlay.classList.add('open'); }
+function closeNotes(){ notesPanel.classList.remove('open'); notesOverlay.classList.remove('open'); }
+
+notesToggle.addEventListener('click', openNotes);
+notesClose.addEventListener('click', closeNotes);
+notesOverlay.addEventListener('click', closeNotes);
 </script>
 
 </body>
